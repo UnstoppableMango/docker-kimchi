@@ -25,8 +25,6 @@ steps:
   inputs:
     command: login
     containerRegistry: $(DockerRegistry)
-
-- bash: docker ps   # Make sure docker has started
   
 - task: Docker@2
   displayName: Docker Build
