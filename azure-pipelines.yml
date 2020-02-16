@@ -7,8 +7,10 @@ trigger:
 workspace:
   clean: all
 
+pool: Linux
+
 variables:
-  DockerVersion: 19.03.5-ce
+  DockerVersion: 19.03.6
   DockerRegistry: DockerHub
 
 steps:
