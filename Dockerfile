@@ -12,6 +12,8 @@ RUN apt-get update && \
         python3-pip \
         python3-requests \
         python3-mock \
+        python3-ethtool \
+        python-ipaddr \
         gettext \
         pkgconf \
         xsltproc \
@@ -22,7 +24,7 @@ RUN apt-get update && \
 
 RUN git clone https://github.com/kimchi-project/kimchi.git && \
     cd kimchi && \
-    pip3 install -r requirements-UBUNTU.txt && \
+#    pip3 install -r requirements-UBUNTU.txt && \
     ./autogen.sh --system && \
     make && \
     make deb
@@ -31,7 +33,6 @@ RUN git clone https://github.com/kimchi-project/kimchi.git && \
 #    rm -rf /var/lib/kimchi/isos /kimchi
 
 FROM ubuntu:19.10
-COPY --from=build
 RUN DEBIAN_FRONTEND=noninteractive && \
     ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && \
     echo $TZ > /etc/timezone && \
@@ -59,3 +60,8 @@ RUN DEBIAN_FRONTEND=noninteractive && \
         open-iscsi \
         libguestfs-tools \
         libnl-route-3-dev
+
+COPY --from=build /kimchi/kimchi*.deb .
+RUN dpkg -i kimchi*.deb
+
+ENTRYPOINT ["kimchid"]
